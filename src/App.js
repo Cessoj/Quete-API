@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import React from 'react';
+import QuoteCard from './components/simpson';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      quote: []
+    }
+    this.getSimpson = this.getSimpson.bind(this);
+  }
+
+  componentDidMount() {
+    fetch('https://simpsons-quotes-api.herokuapp.com/quotes?count=5') 
+      .then(resp => resp.json())
+      .then(data => {
+        console.log({ quote: data[0] });
+        this.setState({ quote: data[0] });
+      });
+  }
+
+  getSimpson = () => {
+    fetch('https://simpsons-quotes-api.herokuapp.com/quotes?count=5')
+      .then(resp => resp.json())
+      .then(data => {
+        console.log({ quote: data[0] });
+        this.setState({ quote: data[0] });
+      });
+  }
+
+  render() {
+    return (
+      <div>
+        <QuoteCard quotes={this.state.quote} />
+        <button type="button" onClick={this.getSimpson}>Quote</button>
+      </div>
+    );
+  }
 }
 
 export default App;
